@@ -24,9 +24,10 @@ export class SearchResultItem {
 
 
 /**
- * 在当前文档中搜索
+ * 在文档中搜索
  * 
  * @param regexp 要搜索的正则表达式
+ * @param document 要搜索的文档
  * @return 搜索结果SearchResult对象
  */
 export function searchInDocument(regexp: RegExp, document: vscode.TextDocument): Thenable<SearchResult> {
@@ -43,4 +44,18 @@ export function searchInDocument(regexp: RegExp, document: vscode.TextDocument):
 	}
 
 	return Promise.resolve(search_result);
+}
+
+export function searchInFiles(regexp: RegExp, files: vscode.Uri[]): Thenable<SearchResult> {
+	return new Promise(async(resolve) => {
+		let search_result: SearchResult = new SearchResult;
+		for (const file of files) {
+			let doc = await vscode.workspace.openTextDocument(file);
+			let tmpRst = await searchInDocument(regexp, doc);
+			if(tmpRst.resultItems.length > 0) {
+				search_result.resultItems.concat(tmpRst.resultItems);
+			}
+		}
+		resolve(search_result);
+	});
 }

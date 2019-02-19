@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 import {searchInDocument} from '../search';
-import {searchIDFunction} from '../example/searchIDFunc';
+import {searchIDFunction, searchIDFunctionInWorkspace} from '../example/searchIDFunc';
 
 suite("Search Tests", function() {
 	let testDoc: vscode.TextDocument;
@@ -60,4 +60,23 @@ suite("Search Tests", function() {
 			}
 		}
 	});
+
+	// test("example searchIDFunctionInWorkspace 1001", async() => {
+	// 	let rst = await searchIDFunctionInWorkspace("1001", "**/*.txt");
+	// 	assert.equal(rst.resultItems.length, 1);
+		
+	// 	let children1 = rst.resultItems[0].children;
+	// 	assert.notEqual(children1, undefined);
+
+	// 	if(children1) {
+	// 		assert.equal(children1.resultItems.length, 1);
+	// 		let children2 = children1.resultItems[0].children;
+	// 		assert.notEqual(children2, undefined);
+
+	// 		if(children2) {
+	// 			assert.equal(children2.resultItems.length, 1);
+	// 			assert.equal(children2.resultItems[0].value, "firstFunc = function(id)");
+	// 		}
+	// 	}
+	// });
 });
