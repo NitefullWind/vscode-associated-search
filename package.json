@@ -1,7 +1,7 @@
 {
 	"name": "associated-search",
 	"displayName": "associated-search",
-	"description": "a simple extension for eaarching somthing",
+	"description": "a simple extension for searching somthing",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.30.0"
@@ -9,18 +9,51 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:extension.helloWorld"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
+    "activationEvents": [
+        "onView:search-results",
+        "onView:search-history",
+        "onCommand:associatedSearch.search"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "associated-search",
+                    "title": "Associated Search",
+                    "icon": "images/icon_24_24.svg"
+                }
+            ]
+        },
+        "views": {
+            "associated-search": [
+                {
+                    "id": "search-results",
+                    "name": "Results"
+                },
+                {
+                    "id": "search-history",
+                    "name": "History"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "associatedSearch.search",
+                "title": "Associated Search: Search",
+                "icon": "images/icon_24_24.svg"
+            }
+        ],
+        "menus": {
+            "view/title": [
+                {
+                    "command": "associatedSearch.search",
+                    "when": "view == search-results",
+                    "group": "navigation"
+                }
+            ]
+        }
+    },
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
