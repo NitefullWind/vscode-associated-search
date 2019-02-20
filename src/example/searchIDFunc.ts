@@ -34,14 +34,14 @@ export function searchIDFunctionInWorkspace(id: string, include: vscode.GlobPatt
 {
 	return new Promise(async(resolve) => {
 		let files = await vscode.workspace.findFiles(include, exclude);
-		let defineIdRst = await searchInFiles(new RegExp("^(\\w+)\\s*=\\s*"+id, "gim"), files);		// ABC = 123
+		let defineIdRst = await searchInFiles(new RegExp("^(\\w+)\\s*=\\s*((\""+id+"\")|("+ id + "))", "gm"), files);		// ABC = 123
 
 		for (const defineIdRstKey in defineIdRst.resultItems) {
 			let defineIdRstItem = defineIdRst.resultItems[defineIdRstKey];
 			
 			let defineId = defineIdRstItem.array[1];				
 			let defineFuncRst = await searchInFiles(
-				new RegExp("\\s+id\\s*==\\s*" + defineId + "\\s+then\\s+(\\w+)", "gim"), files
+				new RegExp(".+\\s*==\\s*" + defineId + "\\s+then.*\\s+return\\s+(\\w+)", "gm"), files
 			);																							// id == ABC then funcABC();
 			defineIdRstItem.children = defineFuncRst;
 
@@ -50,7 +50,7 @@ export function searchIDFunctionInWorkspace(id: string, include: vscode.GlobPatt
 
 				let defineFunc = defineFuncRstItem.array[1];
 				let defineFinalRst = await searchInFiles(
-					new RegExp("^" + defineFunc + "\\s*=\\s*function\\(.*\\)", "gim"), files
+					new RegExp("((^function\\s+" + defineFunc + "\\s*\\(.*\\))|(" + defineFunc + "\\s*=\\s*function\\(.*\\)))", "gm"), files
 				);																						// funcABC = function()
 				defineFuncRstItem.children = defineFinalRst;
 			}

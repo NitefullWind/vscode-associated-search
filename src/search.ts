@@ -20,6 +20,17 @@ export class SearchResultItem {
 		this.value = value;
 		this.array = array;
 	}
+
+	getLabel(): string {
+		return this.value;
+	}
+
+	getCollapsibleState(): vscode.TreeItemCollapsibleState {
+		if(this.children) {
+			return vscode.TreeItemCollapsibleState.Expanded;
+		}
+		return vscode.TreeItemCollapsibleState.None;
+	}
 }
 
 
@@ -53,7 +64,7 @@ export function searchInFiles(regexp: RegExp, files: vscode.Uri[]): Thenable<Sea
 			let doc = await vscode.workspace.openTextDocument(file);
 			let tmpRst = await searchInDocument(regexp, doc);
 			if(tmpRst.resultItems.length > 0) {
-				search_result.resultItems.concat(tmpRst.resultItems);
+				search_result.resultItems = search_result.resultItems.concat(tmpRst.resultItems);
 			}
 		}
 		resolve(search_result);
